@@ -1,0 +1,126 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.field label,
+.field-label {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-title);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.field textarea {
+  min-height: 84px;
+  border-radius: var(--radius-sm);
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(8 125 130 / 0.15);
+}
+
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled {
+  background: var(--bg-muted);
+  cursor: not-allowed;
+}
+
+/* campo com botão dentro (mostrar senha) */
+.field-with-action {
+  position: relative;
+}
+
+.field-with-action input {
+  padding-right: 44px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: inline-flex;
+  padding: 6px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.password-toggle:hover {
+  color: var(--accent);
+}
+
+/* grade de campos */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-grid .span-2 {
+  grid-column: 1 / -1;
+}
+
+/* radio e checkbox */
+.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.choice-group--column {
+  flex-direction: column;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.choice input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
