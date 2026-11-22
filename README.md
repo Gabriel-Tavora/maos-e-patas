@@ -1,81 +1,91 @@
 # Mãos e Patas — Sistema Veterinário
 
-Sistema da clínica Mãos e Patas, feito a partir do projeto
-[time-management](https://github.com/Gabriel-Tavora/time-management): mesma stack
-(Vite + React 19 + React Router 7 + oxlint) e a mesma organização `pages -> hooks -> services`.
-O visual segue a tela de login das referências (verde-petróleo `#075765`, botões pretos, fundo claro).
+Projeto da disciplina de Desenvolvimento Web (ADS — UNIFOR), Grupo 34.
 
-## Rodando
+```
+maos-e-patas/
+├── backend/               API REST em Java 21 + Spring Boot 4 + MySQL (JWT)
+├── frontend/              Telas em React 19 + Vite
+├── iniciar-backend.cmd    sobe o backend em http://localhost:8080
+├── iniciar-frontend.cmd   sobe o frontend em http://localhost:5173
+└── README.md
+```
 
-```bash
+## Pré-requisitos
+
+- **Java 21** ou mais novo (`java -version`)
+- **Node.js 20** ou mais novo (`node -v`)
+- **MySQL** rodando na porta 3306 (no XAMPP: *Start* no MySQL)
+
+## Como rodar
+
+1. Ligue o **MySQL** (XAMPP Control Panel → *Start*).
+2. Dê dois cliques em **`iniciar-backend.cmd`** e espere aparecer `Started MaosepatasApplication`.
+   Na primeira vez o Maven baixa as dependências, o que demora alguns minutos.
+3. Dê dois cliques em **`iniciar-frontend.cmd`**. Na primeira vez ele roda o `npm install` e cria o
+   `frontend/.env.local`.
+4. Abra **http://localhost:5173**.
+
+Deixe as duas janelas abertas enquanto usa o sistema.
+
+### Senha do MySQL
+
+O `iniciar-backend.cmd` usa a senha **vazia**, que é o padrão do XAMPP. Se o seu `root` tiver
+senha, rode pelo terminal:
+
+```powershell
+.\iniciar-backend.cmd minhaSenha
+```
+
+### Rodando sem os atalhos
+
+```powershell
+# backend
+cd backend
+.\mvnw.cmd spring-boot:run '-Dspring-boot.run.arguments=--spring.datasource.password='
+
+# frontend (outro terminal)
+cd frontend
 npm install
 npm run dev
 ```
 
-Sem `VITE_API_URL` o app roda em **modo demonstração**: os dados ficam no navegador
-(`src/services/mock`), com os mesmos clientes e animais das telas de referência.
-
-- Login: `admin@maosepatas.com` / `admin123`
-- Código de recuperação de senha: `123456`
-
-Para usar o backend real, copie `.env.example` para `.env.local` e informe `VITE_API_URL`.
-
-## Telas
-
-| Rota | Tela |
-| --- | --- |
-| `/` | Login (com "Lembrar de mim") |
-| `/ForgotPassword` | Recuperar senha (e-mail → código + nova senha) |
-| `/painel` | Painel de Controle: últimos animais e últimos atendimentos |
-| `/clientes` | Lista de clientes, busca por nome/código/CPF e filtro com/sem animais |
-| `/clientes/novo` | Adicionar cliente: informações pessoais, contatos (WhatsApp, vários contatos) e endereço |
-| `/clientes/:id` | Ficha do cliente: dados, contatos com link do WhatsApp, endereço, animais; edição por seção em janela; excluir pelos três pontinhos (bloqueado se o tutor ainda tiver animais) |
-| `/clientes/:id/animais/novo` | Cadastrar animal: foto, sexo, esterilização, espécie, raça, pelagem, nascimento, microchip; "Adicionar este e mais animais" / "Adicionar" → lista dos adicionados → "Salvar" |
-| `/clientes/:id/animais/:animalId` | Ficha do animal: dados, edição, tutor, histórico, excluir pelos três pontinhos e "Acessar ficha de atendimento" |
-| `/atendimentos` | Consultas e Vacinas: contadores, cadastro, busca, filtro e marcar como realizado |
-| `/perfil` | Editar perfil do administrador e alterar senha |
-
-## Estrutura
+O frontend só fala com o backend se existir o arquivo `frontend/.env.local` com:
 
 ```
-src/
-  main.jsx                 rotas
-  config/app.js            nome, rodapé, itens do menu
-  config/options.js        opções dos selects (espécies e raças, estados, tipos de contato...)
-  context/                 TokenContext (auth), privateRoutex
-  services/
-    api.js                 request() + troca automática para o modo demonstração
-    login.js userData.js clientData.js animalData.js appointmentData.js
-    mock/                  backend de demonstração (seed.js tem os dados iniciais)
-  hooks/                   useFetch, usePasswordReset, usePageTitle
-  components/
-    common/                Button, Inputs (Input, Select, Textarea, RadioGroup, Checkbox), Modal, MoreMenu, AppointmentCard
-    Layouts/               AppLayout, AuthLayout, TopBar (+ rodapé), SideBar
-    Clients/ClientFields   blocos de campos do cliente (cadastro e edição)
-    Animals/               AnimalFields, AnimalAvatar
-  pages/                   Auth, Dashboard, Clients, Animals, Appointments, Profile, NotFound
-  validations/             clientValidation (CPF, contatos, endereço), animalValidation
-  utils/                   masks (CPF, CEP, telefone, WhatsApp), formatDate, photo, message, handleApiError
+VITE_BACKEND_URL=http://localhost:8080
 ```
 
-## API esperada pelo backend
+Sem esse arquivo, o frontend roda em **modo demonstração**: os dados ficam salvos no navegador e
+o backend não é usado.
 
-| Método | Rota | Observação |
+## Login
+
+| Situação | E-mail | Senha |
 | --- | --- | --- |
-| POST | `/login` | `{ email, password }` → `{ id, token }` |
-| POST / PATCH | `/password` | envia código / redefine com `{ code, password }` |
-| GET / PATCH | `/users/me`, `/users` | perfil do administrador |
-| GET / POST | `/clients` | cliente com `contacts[]`, `address{}`; a lista vem com `animals[]` |
-| GET / PATCH / DELETE | `/clients/:id` | DELETE deve responder 409 se houver animais |
-| GET / POST | `/animals` | lista mais recentes primeiro, com `client{ id, name, code }` |
-| GET / PATCH / DELETE | `/animals/:id` | com `appointments[]` |
-| GET / POST | `/appointments` | com `animal_name` e `client_name` |
-| PATCH / DELETE | `/appointments/:id` | |
+| Banco novo: o `DataInitializer` cria o administrador | `admin@maosepatas.com.br` | `admin123` |
+| Modo demonstração | `admin@maosepatas.com.br` | `admin123` |
 
-O formato exato de cada objeto está em `src/services/mock/seed.js`.
+Se o banco já tinha um administrador antigo com a senha em texto puro, o login falha, porque as
+senhas agora usam BCrypt. O comando para corrigir está em `backend/CORRECOES.md`.
 
-## O que saiu do projeto base
+**Recuperar senha:** o código de 6 dígitos aparece no terminal do backend (o projeto ainda não
+envia e-mail).
 
-Horas extras, calendário, PDFs, perfis por cargo (team leader, coordenador...), tema claro/escuro,
-relógio analógico, avatares externos, `react-helmet-async`, `@tanstack/react-table`, `sweetalert2`
-e `react-time-picker`.
+## Como o frontend fala com o backend
+
+- O navegador chama `http://localhost:5173/api/...`, e o Vite repassa para `http://localhost:8080`
+  (`frontend/vite.config.js`). Por isso não há problema de CORS.
+- As rotas estão em `frontend/src/services/endpoints.js` e seguem os controllers de
+  `backend/src/main/java/.../controller`.
+- `frontend/src/services/adapters.js` converte os DTOs do Java para o formato das telas.
+
+A documentação de cada lado está em `frontend/README.md` e `backend/README.MD`.
+
+## Banco de dados
+
+- Nome: `maosepatas`. É criado sozinho na primeira execução, junto com as tabelas
+  (`ddl-auto: update`).
+- Tabelas: `tb_administrador`, `tb_tutor`, `tb_contato`, `tb_animal` e `tb_atendimento`.
+- Usuário e senha padrão do backend: `root` / `1234`. Dá para trocar pelas variáveis `DB_USER` e
+  `DB_PASSWORD`, ou pela linha de comando, como acima.
