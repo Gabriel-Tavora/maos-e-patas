@@ -8,6 +8,8 @@ maos-e-patas/
 ├── frontend/              Telas em React 19 + Vite
 ├── iniciar-backend.cmd    sobe o backend em http://localhost:8080
 ├── iniciar-frontend.cmd   sobe o frontend em http://localhost:5173
+├── criar-dados-teste.cmd  cadastra clientes, animais e atendimentos de exemplo
+├── scripts/               script usado pelo criar-dados-teste.cmd
 └── README.md
 ```
 
@@ -20,13 +22,30 @@ maos-e-patas/
 ## Como rodar
 
 1. Ligue o **MySQL** (XAMPP Control Panel → *Start*).
-2. Dê dois cliques em **`iniciar-backend.cmd`** e espere aparecer `Started MaosepatasApplication`.
+2. Dê dois cliques em **`iniciar-backend.cmd`**. Ele pergunta se você quer criar **dados de teste**:
+   responda **S** na primeira vez. Depois espere aparecer `Started MaosepatasApplication`.
    Na primeira vez o Maven baixa as dependências, o que demora alguns minutos.
 3. Dê dois cliques em **`iniciar-frontend.cmd`**. Na primeira vez ele roda o `npm install` e cria o
    `frontend/.env.local`.
 4. Abra **http://localhost:5173**.
 
 Deixe as duas janelas abertas enquanto usa o sistema.
+
+### Dados de teste
+
+Um banco novo começa só com o administrador. Para ter o que ver nas telas, há duas formas:
+
+- responder **S** quando o `iniciar-backend.cmd` perguntar. Uma janela separada espera o backend
+  subir e cadastra os dados sozinha;
+- ou, com o backend já rodando, dar dois cliques em **`criar-dados-teste.cmd`**.
+
+São cadastrados 4 clientes (um deles sem animais), 5 animais e 5 atendimentos, com datas
+próximas de hoje: os realizados ficam nos dias anteriores e os agendados nos próximos dias. Os
+dados entram pelas próprias rotas da API, então passam pelas mesmas validações das telas. Pode
+rodar mais de uma vez: clientes com CPF já cadastrado são pulados.
+
+Se o login padrão (`admin@maosepatas.com.br` / `admin123`) não funcionar, o script pede outro
+e-mail e senha de administrador.
 
 ### Senha do MySQL
 

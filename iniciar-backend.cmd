@@ -14,6 +14,15 @@ if errorlevel 1 (
   exit /b 1
 )
 
+echo.
+echo Deseja criar dados de teste (clientes, animais e atendimentos) quando o backend subir?
+echo Use S na primeira vez, com o banco vazio. Se nao responder em 15 segundos, segue sem criar.
+choice /c SN /t 15 /d N /m "Criar dados de teste"
+if not errorlevel 2 (
+  start "Maos e Patas - dados de teste" powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\dados-teste.ps1" -Aguardar
+)
+echo.
+
 cd /d "%~dp0backend"
 
 rem Recria a configuracao do Maven Wrapper se ela nao existir
