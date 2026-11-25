@@ -10,6 +10,7 @@ maos-e-patas/
 ├── iniciar-frontend.cmd   sobe o frontend em http://localhost:5173
 ├── criar-dados-teste.cmd  cadastra clientes, animais e atendimentos de exemplo
 ├── scripts/               script usado pelo criar-dados-teste.cmd
+├── DEPLOY-RAILWAY.md      como publicar o sistema na internet
 └── README.md
 ```
 
@@ -77,6 +78,12 @@ VITE_BACKEND_URL=http://localhost:8080
 
 Sem esse arquivo, o frontend roda em **modo demonstração**: os dados ficam salvos no navegador e
 o backend não é usado.
+
+## Publicar na internet
+
+O passo a passo para deixar o sistema no ar no Railway, com banco MySQL, está em
+[`DEPLOY-RAILWAY.md`](DEPLOY-RAILWAY.md). Os `Dockerfile` do `backend/` e do `frontend/` são
+usados nesse deploy e não mudam nada no jeito de rodar no PC.
 
 ## Login
 

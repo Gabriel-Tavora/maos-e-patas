@@ -2,6 +2,7 @@
 # Usa as próprias rotas da API, então os dados passam pelas mesmas validações das telas.
 #
 # Uso:  criar-dados-teste.cmd              (o backend precisa estar rodando)
+#       dados-teste.ps1 -Api https://seu-site   (site publicado)
 #       dados-teste.ps1 -Aguardar          (espera o backend subir; usado pelo iniciar-backend.cmd)
 
 param(
@@ -10,6 +11,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$Api = $Api.TrimEnd("/")
 try { [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch { }
 
 function Write-Titulo($texto) { Write-Host ""; Write-Host $texto -ForegroundColor Cyan }
@@ -259,5 +261,9 @@ if ($falhas -gt 0) {
     Write-Host "  $falhas item(ns) com erro (veja acima)." -ForegroundColor Yellow
 }
 Write-Host ""
-Write-Host "Abra http://localhost:5173 e entre com o administrador para ver os dados."
+if ($Api -match "localhost:8080") {
+    Write-Host "Abra http://localhost:5173 e entre com o administrador para ver os dados."
+} else {
+    Write-Host "Abra $Api e entre com o administrador para ver os dados."
+}
 Finalizar 0
