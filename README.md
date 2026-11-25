@@ -40,6 +40,12 @@ Um banco novo começa só com o administrador. Para ter o que ver nas telas, há
   subir e cadastra os dados sozinha;
 - ou, com o backend já rodando, dar dois cliques em **`criar-dados-teste.cmd`**.
 
+Para o site publicado, rode pelo terminal, na pasta do projeto, passando o link do site:
+
+```powershell
+.\criar-dados-teste.cmd https://SEU-SITE.up.railway.app
+```
+
 São cadastrados 4 clientes (um deles sem animais), 5 animais e 5 atendimentos, com datas
 próximas de hoje: os realizados ficam nos dias anteriores e os agendados nos próximos dias. Os
 dados entram pelas próprias rotas da API, então passam pelas mesmas validações das telas. Pode
@@ -81,6 +87,8 @@ o backend não é usado.
 
 ## Publicar na internet
 
+Versão online: **https://SEU-SITE.up.railway.app** (login `admin@maosepatas.com.br` / `admin123`).
+
 O passo a passo para deixar o sistema no ar no Railway, com banco MySQL, está em
 [`DEPLOY-RAILWAY.md`](DEPLOY-RAILWAY.md). Os `Dockerfile` do `backend/` e do `frontend/` são
 usados nesse deploy e não mudam nada no jeito de rodar no PC.
@@ -102,6 +110,7 @@ envia e-mail).
 
 - O navegador chama `http://localhost:5173/api/...`, e o Vite repassa para `http://localhost:8080`
   (`frontend/vite.config.js`). Por isso não há problema de CORS.
+- No site publicado quem faz esse repasse é o nginx do frontend (`frontend/nginx.conf.template`).
 - As rotas estão em `frontend/src/services/endpoints.js` e seguem os controllers de
   `backend/src/main/java/.../controller`.
 - `frontend/src/services/adapters.js` converte os DTOs do Java para o formato das telas.
